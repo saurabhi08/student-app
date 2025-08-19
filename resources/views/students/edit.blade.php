@@ -22,9 +22,14 @@
                 @error('email')<div class="invalid-feedback">{{ $message }}</div>@enderror
             </div>
             <div class="mb-3">
-                <label class="form-label">Course</label>
-                <input class="form-control @error('course') is-invalid @enderror" name="course" value="{{ old('course', $student->course) }}">
-                @error('course')<div class="invalid-feedback">{{ $message }}</div>@enderror
+                <label class="form-label">Courses</label>
+                <select class="form-select @error('courses') is-invalid @enderror" name="courses[]" multiple size="6">
+                    @php($selectedCourses = collect(old('courses', $student->courses->pluck('id')->all())))
+                    @foreach(\App\Models\Course::orderBy('name')->get() as $course)
+                        <option value="{{ $course->id }}" @selected($selectedCourses->contains($course->id))>{{ $course->name }}</option>
+                    @endforeach
+                </select>
+                @error('courses')<div class="invalid-feedback">{{ $message }}</div>@enderror
             </div>
             <button type="submit" class="btn btn-primary">Update</button>
         </form>

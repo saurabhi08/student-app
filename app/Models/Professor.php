@@ -12,6 +12,11 @@ class Professor extends Model
     protected $fillable = [
         'name',
     ];
+
+    public function course()
+    {
+        return $this->hasOne(Course::class);
+    }
 }
 
 

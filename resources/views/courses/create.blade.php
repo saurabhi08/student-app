@@ -20,6 +20,16 @@
                 <textarea class="form-control @error('description') is-invalid @enderror" name="description" rows="5">{{ old('description') }}</textarea>
                 @error('description')<div class="invalid-feedback">{{ $message }}</div>@enderror
             </div>
+            <div class="mb-3">
+                <label class="form-label">Professor</label>
+                <select class="form-select @error('professor_id') is-invalid @enderror" name="professor_id">
+                    <option value="">— None —</option>
+                    @foreach(\App\Models\Professor::orderBy('name')->get() as $professor)
+                        <option value="{{ $professor->id }}" @selected(old('professor_id') == $professor->id)>{{ $professor->name }}</option>
+                    @endforeach
+                </select>
+                @error('professor_id')<div class="invalid-feedback">{{ $message }}</div>@enderror
+            </div>
             <button type="submit" class="btn btn-primary">Save</button>
         </form>
     </div>

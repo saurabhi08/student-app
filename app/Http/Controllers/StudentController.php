@@ -23,10 +23,17 @@ class StudentController extends Controller
         $validated = $request->validate([
             'name' => ['required', 'string', 'max:255'],
             'email' => ['required', 'email', 'max:255', 'unique:students,email'],
-            'course' => ['nullable', 'string', 'max:255'],
+            'courses' => ['nullable', 'array'],
+            'courses.*' => ['integer', 'exists:courses,id'],
         ]);
 
-        $student = Student::create($validated);
+        $student = Student::create([
+            'name' => $validated['name'],
+            'email' => $validated['email'],
+        ]);
+        if (isset($validated['courses'])) {
+            $student->courses()->sync($validated['courses']);
+        }
         return redirect()->route('students.show', $student)->with('status', 'Student created');
     }
 
@@ -48,10 +55,15 @@ class StudentController extends Controller
         $validated = $request->validate([
             'name' => ['required', 'string', 'max:255'],
             'email' => ['required', 'email', 'max:255', 'unique:students,email,' . $student->id],
-            'course' => ['nullable', 'string', 'max:255'],
+            'courses' => ['nullable', 'array'],
+            'courses.*' => ['integer', 'exists:courses,id'],
         ]);
 
-        $student->update($validated);
+        $student->update([
+            'name' => $validated['name'],
+            'email' => $validated['email'],
+        ]);
+        $student->courses()->sync($validated['courses'] ?? []);
         return redirect()->route('students.show', $student)->with('status', 'Student updated');
     }
 

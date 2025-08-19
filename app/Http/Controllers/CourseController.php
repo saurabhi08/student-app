@@ -23,6 +23,7 @@ class CourseController extends Controller
         $validated = $request->validate([
             'name' => ['required', 'string', 'max:255'],
             'description' => ['nullable', 'string'],
+            'professor_id' => ['nullable', 'integer', 'exists:professors,id'],
         ]);
 
         $course = Course::create($validated);
@@ -47,6 +48,7 @@ class CourseController extends Controller
         $validated = $request->validate([
             'name' => ['required', 'string', 'max:255'],
             'description' => ['nullable', 'string'],
+            'professor_id' => ['nullable', 'integer', 'exists:professors,id'],
         ]);
 
         $course->update($validated);

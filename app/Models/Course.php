@@ -13,6 +13,16 @@ class Course extends Model
         'name',
         'description',
     ];
+
+    public function students()
+    {
+        return $this->belongsToMany(Student::class)->withTimestamps();
+    }
+
+    public function professor()
+    {
+        return $this->belongsTo(Professor::class);
+    }
 }
 
 
